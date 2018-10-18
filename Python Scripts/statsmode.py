@@ -12,4 +12,4 @@ y = target["MEDV"]
 
 model = sm.OLS(y, x).fit()
 predictions = model.predict(x)
-print(model.summary()) 
+print(model.summary())  

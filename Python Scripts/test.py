@@ -14,9 +14,12 @@ print(type(gl))
 
 
 # updating rodataframe with ws with new columns 
-gl['HL_PCT'] = ( gl['Adj. High'] -  gl['Adj. Close']) /  gl['Adj. Close'] * 100.0
+gl['HL_PCT'] = (gl['Adj. High'] -  gl['Adj. Close']) /  gl['Adj. Close'] * 100.0
 gl['PCT_change'] = (gl['Adj. Close'] - gl['Adj. Open']) / gl['Adj. Open'] * 100.0
 
 gl = gl[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
+
+forecast_col = 'Adj. Close'
+gl['label']
 
 print(gl.head())
