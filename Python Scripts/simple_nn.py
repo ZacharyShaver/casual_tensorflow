@@ -26,6 +26,29 @@ class Net():
                     for node in layer.nodes:
                         for nnode in nlayer.nodes:
                             node.make_connection(nnode)
+
+
+    
+    def load_first(self, inputs):
+        for i in range(0, len(inputs)):
+            if len(inputs) != len(self.net[0].nodes):
+                print('invalid size ')
+                break
+            self.net[0].nodes[i].val = inputs[i]
+
+
+    def propagate_forward(self):
+        for layer in self.net:
+            if layer.lnum == len(self.net ) - 1:
+                print(layer.lnum)
+                for lnode in self.net.pop().nodes:
+                    print('Output :', lnode.val)
+
+            for node in layer.nodes:
+                for connection in node.connections:
+                    # connection.print_connection()
+                    # print(connection)
+                    connection.to_whomst.val = connection.from_whome.val * connection.weight + connection.to_whomst.bias
             
 
 class Lay:
@@ -50,17 +73,19 @@ class Node:
         self.lnum = lnum
         self.nnum = nnum    
         self.connections = []
+        self.val = 0
 
         if lnum == 0:
             self.bias = 1
         else:
-            self.bias = random.uniform(0.0, 1.0)
-        print("layer ", lnum, " node ", nnum)
+            self.bias = random.uniform(-1.0, 1.0)
+        # print("layer ", lnum, " node ", nnum)
 
     def make_connection(self, next_layer_node): # the connection will take the current node and another node that is passed in 
         self.connections.append(Connection(random.uniform(0.0, 1.0), self , next_layer_node))
-        #print(   "connection between ", self.whoami(), next_layer_node.whoami()   )
-        self.connections.pop().print_connection()
+        # for print testing 
+        # print(   "connection between ", self.whoami(), next_layer_node.whoami()   )
+        # self.connections.pop().print_connection()
 
     def whoami(self):
         return self.lnum, self.nnum
@@ -87,5 +112,8 @@ class Connection:
 nnet = Net([2,3,2])
 
 nnet.create_net()
-nnet.print_net()
+# nnet.print_net()
 nnet.make_random_connections()
+
+nnet.load_first([1,0])
+nnet.propagate_forward()
