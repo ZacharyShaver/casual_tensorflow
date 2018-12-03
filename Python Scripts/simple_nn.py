@@ -17,6 +17,8 @@ class Net():
         for layer in self.net:
             layer.print_size()
             layer.print_layer()
+            for node in layer.nodes:
+                print(node.print_node())
 
     def make_random_connections(self):
         # like a zero reset
@@ -26,8 +28,7 @@ class Net():
                     for node in layer.nodes:
                         for nnode in nlayer.nodes:
                             node.make_connection(nnode)
-
-
+                            
     
     def load_first(self, inputs):
         for i in range(0, len(inputs)):
@@ -46,9 +47,12 @@ class Net():
 
             for node in layer.nodes:
                 for connection in node.connections:
+                    connection.print_connection()
                     # connection.print_connection()
                     # print(connection)
-                    connection.to_whomst.val = connection.from_whome.val * connection.weight + connection.to_whomst.bias
+                    connection.to_whomst.set_val(connection.from_whome.val * connection.weight)
+
+                    print('Node value ' ,node.val, ' , ', connection.to_whomst.val , ' = ', connection.from_whome.val, ' * ', connection.weight, ' + ', connection.to_whomst.bias)
             
 
 class Lay:
@@ -78,21 +82,27 @@ class Node:
         if lnum == 0:
             self.bias = 1
         else:
-            self.bias = random.uniform(-1.0, 1.0)
+        # random.uniform(-1.0, 1.0)
+            self.bias = 1
         # print("layer ", lnum, " node ", nnum)
 
-    def make_connection(self, next_layer_node): # the connection will take the current node and another node that is passed in 
-        self.connections.append(Connection(random.uniform(0.0, 1.0), self , next_layer_node))
+    def make_connection(self, next_layer_node): # the connection will take the current node and another node that is passed in
+
+        # random.uniform(-1.0, 1.0)
+        self.connections.append(Connection(1, self , next_layer_node))
         # for print testing 
         # print(   "connection between ", self.whoami(), next_layer_node.whoami()   )
         # self.connections.pop().print_connection()
+
+    def set_val(self, val):
+        self.val += val
 
     def whoami(self):
         return self.lnum, self.nnum
 
     def print_node(self):
         #print('layer num: ', self.lnum, ' node number: ', self.nnum)
-        for connection in self.connecitons:
+        for connection in self.connections:
             connection.print_connection()
 
 
@@ -110,10 +120,11 @@ class Connection:
     
 
 nnet = Net([2,3,2])
-
 nnet.create_net()
 # nnet.print_net()
 nnet.make_random_connections()
 
-nnet.load_first([1,0])
+nnet.load_first([2 ,6])
 nnet.propagate_forward()
+
+#nnet.print_net()
